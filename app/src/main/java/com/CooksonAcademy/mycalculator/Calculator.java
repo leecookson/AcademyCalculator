@@ -88,8 +88,10 @@ public class Calculator {
             currentValue = currentOperand;
             currentOperator = operator;
             setCurrentOperand(Double.NaN);  //saved operand as value, clear operand
+
         } else if (currentOperator != Operator.CALC_NONE && Double.isNaN(currentOperand)) {
-            // ignore
+            // if multiple operators used, use last one, ignore previous
+            currentOperator = operator;
 
         } else {
             // do operation based on existing operator and operand, set operand to new one

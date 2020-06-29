@@ -23,10 +23,10 @@ public class NegativeUnitTest {
     }
 
     @Test
-    public void ignoreMultipleOperator_isCorrect() {
+    public void useLastOperatorWhenMultipleCalculator() {
         Calculator calc = new Calculator();
         calc.doDigit(1);
-        calc.doOperation(Calculator.Operator.CALC_ADD);
+        calc.doOperation(Calculator.Operator.CALC_SUB);
         calc.doOperation(Calculator.Operator.CALC_ADD);
         calc.doDigit(1);
         calc.doEquals();
