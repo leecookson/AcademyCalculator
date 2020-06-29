@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:textSize="100pt" >
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -69,7 +70,7 @@
             android:layout_margin="1dp"
             android:layout_weight="0.25"
             android:background="@drawable/operator_buttons"
-            android:text="/"
+            android:text="÷"
             android:textColor="#ecf0f1"
             android:textSize="36sp"/>
 
@@ -123,7 +124,7 @@
             android:background="@drawable/operator_buttons"
             android:text="x"
             android:textColor="#ecf0f1"
-            android:textSize="36sp"/>
+            android:textSize="26dp"/>
 
     </LinearLayout>
 

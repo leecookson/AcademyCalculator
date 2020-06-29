@@ -63,7 +63,7 @@ public class NegativeUnitTest {
     }
 
     @Test
-    public void ignoreMultipleOperatorAfterEquals_isCorrect() {
+    public void ignoreMultipleOperatorsAfterEquals_isCorrect() {
         Calculator calc = new Calculator();
         calc.doDigit(7);
         calc.doOperation(Calculator.Operator.CALC_ADD);
@@ -77,4 +77,53 @@ public class NegativeUnitTest {
 
         assertEquals(Double.NaN, calc.getCurrentValue(), 0);
     }
+
+    @Test
+    public void maxDigitsGood_isCorrect() {
+        double testValue = Double.parseDouble("777777777777");
+        Calculator calc = new Calculator();
+        calc.doDigit(7);
+        calc.doDigit(7);
+        calc.doDigit(7);
+
+        calc.doDigit(7);
+        calc.doDigit(7);
+        calc.doDigit(7);
+
+        calc.doDigit(7);
+        calc.doDigit(7);
+        calc.doDigit(7);
+
+        calc.doDigit(7);
+        calc.doDigit(7);
+        calc.doDigit(7);
+
+        assertEquals(testValue, calc.getCurrentOperand(), 0);
+    }
+
+    @Test
+    public void maxDigitsBad_isCorrect() {
+        double testValue = Double.parseDouble("777777777777");
+        Calculator calc = new Calculator();
+        calc.doDigit(7);
+        calc.doDigit(7);
+        calc.doDigit(7);
+
+        calc.doDigit(7);
+        calc.doDigit(7);
+        calc.doDigit(7);
+
+        calc.doDigit(7);
+        calc.doDigit(7);
+        calc.doDigit(7);
+
+        calc.doDigit(7);
+        calc.doDigit(7);
+        calc.doDigit(7);
+
+        calc.doDigit(7);
+
+        assertEquals(Double.NaN, calc.getCurrentOperand(), 0);
+    }
+
 }

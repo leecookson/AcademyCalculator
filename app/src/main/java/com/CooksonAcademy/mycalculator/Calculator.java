@@ -7,6 +7,10 @@ import android.util.Log;
 // currentOperand will always be the right side
 // currentOperator will hold last operator, pending receipt of a new operand (right side)
 public class Calculator {
+
+    long MAX_DIGITS = 12;
+    long MAX_NUMBER = (long) (Math.pow(10, MAX_DIGITS - 1) + 1);
+
     public Calculator()
     {
         currentValue = Double.NaN;
@@ -110,6 +114,11 @@ public class Calculator {
         Log.v("dDig", "currentValue " + currentValue);
         Log.v("dDig", "currentOperand " + currentOperand);
         Log.v("dDig", "currentOperator " + currentOperator);
+        if (currentOperand > MAX_NUMBER) {
+            currentOperand = Double.NaN;
+            return;
+        }
+
         if (currentOperator == Operator.CALC_NONE && Double.isNaN(currentOperand)) {
             currentOperand = digit;
             currentValue = Double.NaN;

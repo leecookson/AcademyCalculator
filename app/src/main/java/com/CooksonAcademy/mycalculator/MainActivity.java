@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             public void onClick(View v) {
                 calc.doDigit(1);
                 edittext1.setText(setValue(calc.getCurrentOperand()));
-                texttoSpeak(setValue(calc.getCurrentOperand()));
+                texttoSpeak(setValue(calc.getCurrentOperand()), true);
             }
         });
 
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             public void onClick(View v) {
                 calc.doDigit(2);
                 edittext1.setText(setValue(calc.getCurrentOperand()));
-                texttoSpeak(setValue(calc.getCurrentOperand()));
+                texttoSpeak(setValue(calc.getCurrentOperand()), true);
             }
         });
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             public void onClick(View v) {
                 calc.doDigit(3);
                 edittext1.setText(setValue(calc.getCurrentOperand()));
-                texttoSpeak(setValue(calc.getCurrentOperand()));
+                texttoSpeak(setValue(calc.getCurrentOperand()), true);
             }
         });
 
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             public void onClick(View v) {
                 calc.doDigit(4);
                 edittext1.setText(setValue(calc.getCurrentOperand()));
-                texttoSpeak(setValue(calc.getCurrentOperand()));
+                texttoSpeak(setValue(calc.getCurrentOperand()), true);
             }
         });
 
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             public void onClick(View v) {
                 calc.doDigit(5);
                 edittext1.setText(setValue(calc.getCurrentOperand()));
-                texttoSpeak(setValue(calc.getCurrentOperand()));
+                texttoSpeak(setValue(calc.getCurrentOperand()), true);
             }
         });
 
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             public void onClick(View v) {
                 calc.doDigit(6);
                 edittext1.setText(setValue(calc.getCurrentOperand()));
-                texttoSpeak(calc.getCurrentOperand());
+                texttoSpeak(setValue(calc.getCurrentOperand()), true);
             }
         });
 
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             public void onClick(View v) {
                 calc.doDigit(7);
                 edittext1.setText(setValue(calc.getCurrentOperand()));
-                texttoSpeak(setValue(calc.getCurrentOperand()));
+                texttoSpeak(setValue(calc.getCurrentOperand()), true);
             }
         });
 
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             public void onClick(View v) {
                 calc.doDigit(8);
                 edittext1.setText(setValue(calc.getCurrentOperand()));
-                texttoSpeak(setValue(calc.getCurrentOperand()));
+                texttoSpeak(setValue(calc.getCurrentOperand()), true);
             }
         });
 
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             public void onClick(View v) {
                 calc.doDigit(9);
                 edittext1.setText(setValue(calc.getCurrentOperand()));
-                texttoSpeak(setValue(calc.getCurrentOperand()));
+                texttoSpeak(setValue(calc.getCurrentOperand()), true);
             }
         });
 
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             public void onClick(View v) {
                 calc.doDigit(0);
                 edittext1.setText(setValue(calc.getCurrentOperand()));
-                texttoSpeak(setValue(calc.getCurrentOperand()));
+                texttoSpeak(setValue(calc.getCurrentOperand()), true);
             }
         });
 
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             @Override
             public void onClick(View v) {
                 calc.doOperation(Calculator.Operator.CALC_MUL);
-                edittext1.setText("*");
+                edittext1.setText("x");
                 texttoSpeak("times");
             }
         });
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             @Override
             public void onClick(View v) {
                 calc.doOperation(Calculator.Operator.CALC_DIV);
-                edittext1.setText("/");
+                edittext1.setText("÷");
                 texttoSpeak("divide by");
             }
         });
@@ -277,15 +277,18 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     }
 
     private void texttoSpeak(String speakText) {
+        texttoSpeak(speakText, false);
+    }
+
+    private void texttoSpeak(String speakText, boolean flush) {
         String text = speakText;
         if ("".equals(text)) {
             return;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, null, null);
-        }
-        else {
+        if (flush) {
             textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+        } else {
+            textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, null, null);
         }
     }
 
