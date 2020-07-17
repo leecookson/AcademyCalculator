@@ -1,10 +1,7 @@
 package com.CooksonAcademy.mycalculator;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,15 +14,32 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
-    Calculator calc = new Calculator();
+    private static Calculator calc;
+    private TextToSpeech textToSpeech;
+
     TextView edittext1;
-    TextToSpeech textToSpeech;
     Button button_0, button_1, button_2, button_3, button_4, button_5, button_6, button_7, button_8, button_9, button_Add, button_Sub,
             button_Mul, button_Div, button_Equ, button_Del, button_Dot, button_Remainder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.i("ACTIVITY", "CREATE");
+
+        if (calc == null) {
+            calc = new Calculator();
+        }
+
+        if (textToSpeech == null) {
+            MyApplication app = (MyApplication) getApplication();
+            TextToSpeech appTextToSpeech = app.getTextToSpeech();
+            if (appTextToSpeech == null) {
+                app.setTextToSpeech(new TextToSpeech(getApplicationContext(), this));
+            }
+            textToSpeech = app.getTextToSpeech();
+        }
+
         setContentView(R.layout.activity_main);
 
         button_0 = (Button) findViewById(R.id.b0);
@@ -47,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         button_Del = (Button) findViewById(R.id.buttonDel);
         button_Equ = (Button) findViewById(R.id.buttoneql);
 
+        Log.i("ACTIVITY", "INIT TEXTVIEW");
         edittext1 = (TextView) findViewById(R.id.display);
 
         edittext1.setOnClickListener(new View.OnClickListener() {
@@ -207,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             public void onClick(View v) {
                 calc.reset();
                 edittext1.setText("");
-                texttoSpeak("clear");
+                texttoSpeak("clear", true);
             }
         });
 
@@ -223,27 +238,27 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
             }
         });
-
  */
+    }
 
-        edittext1.addTextChangedListener(new TextWatcher() {
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
 
-            public void afterTextChanged(Editable s) {
-
-                // you can call or do what you want with your EditText here
-
-                // yourEditText...
-                //texttoSpeak(edittext1.getText() + "");
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        });
-
-        textToSpeech = new TextToSpeech(this, this);
+        savedInstanceState.putString("currentValue", edittext1.getText().toString());
 
     }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        {
+
+            edittext1.setText("" + savedInstanceState.getString("currentValue"));
+
+        }
+    }
+
     public String setValue(double n) {
         if (Double.isNaN(n)) {
             return "Not a Number";
@@ -255,7 +270,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     @Override
     public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS) {
+        Log.i("MAIN", "INIT");
+        if (status == TextToSpeech.SUCCESS && textToSpeech != null) {
             int result = textToSpeech.setLanguage(Locale.US);
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e("error", "This Language is not supported");
@@ -269,11 +285,29 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     @Override
     public void onDestroy() {
-        if (textToSpeech != null) {
-            textToSpeech.stop();
-            textToSpeech.shutdown();
-        }
+        Log.i("MAIN", "DESTROY");
+
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.i("MAIN", "RESUME");
+        super.onResume();
+
+        edittext1 = (TextView) findViewById(R.id.display);
+
+        double currentValue = calc.getCurrentValue();
+        double currentOperand = calc.getCurrentOperand();
+        Log.i("MAIN", "CURRENT " + currentValue + ", " + currentOperand);
+        if (!Double.isNaN(currentValue)) {
+            Log.i("MAIN", "RELOAD TEXT VALUE " + currentValue);
+            //edittext1.setText((int) currentValue);
+        } else if (!Double.isNaN(currentOperand)) {
+            Log.i("MAIN", "RELOAD TEXT OPERAND " + currentOperand);
+            // WHY is resource not found here?
+            //edittext1.setText((int) currentOperand);
+        }
     }
 
     private void texttoSpeak(String speakText) {
@@ -295,6 +329,5 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private void texttoSpeak(double number) {
         texttoSpeak(setValue(number));
     }
-
 
 }
